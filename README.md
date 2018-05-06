@@ -15,7 +15,7 @@ In this implementation, everything, including finding the ranks and the actual C
 
 ## Usage
 ```bash
-python3 script/decomp.py [-p PATH] [-d DECOMPTYPE] [-m MODEL] [-r CHECKPOINT] [-s STATEDICT] [-v]
+python3 scripts/decomp.py [-p PATH] [-d DECOMPTYPE] [-m MODEL] [-r CHECKPOINT] [-s STATEDICT] [-v]
 ```
 - PATH specifies the path to the dataset
 - DECOMPTYPE is either cp (default) or tucker
@@ -26,9 +26,9 @@ python3 script/decomp.py [-p PATH] [-d DECOMPTYPE] [-m MODEL] [-r CHECKPOINT] [-
 
 ## Pre-decomposed and fine-tuned model
 
-A pre-decomposed ResNet50 is included in the model directory as resnet50_tucker.pth.
+A pre-decomposed ResNet50 is included in the models directory as resnet50_tucker.pth.
 
-The fine-tuned parameters for the model is the resnet50_tucker_state.pth in the model directory.
+The fine-tuned parameters for the model is the resnet50_tucker_state.pth in the models directory.
 
 ## Results
 ### ResNet50
