@@ -22,12 +22,26 @@ python3 script/decomp.py [-p PATH] [-d DECOMPTYPE] [-m MODEL] [-r CHECKPOINT] [-
 - To specify the parameters for the model, use STATEDICT
 - [-v] option for evaluating the inference accuracy of the model without fine-tuning
 
+## Pre-decomposed and fine-tuned model
+
+A pre-decomposed ResNet50 is included in the model directory as resnet50_tucker.pth.
+
+The fine-tuned parameters for the model is the resnet50_tucker_state.pth in the model directory.
+
 ## Results
-ResNet50
+### ResNet50
 
 |  | Top-1 | Top-5 | FLOPs in Convolutions (G) |
 | ------------- | ------------- | ------------- |  ------------- |
 | Before | 76.15% | 92.87% | 7.0 |
 | After | 74.88% | 92.39% | 4.7 |
+
+# References
+
+- CP-decomposition with Tensor Power Method for Convolutional Neural Networks Compression: https://arxiv.org/abs/1701.07148
+- Compression of Deep Convolutional Neural Networks for Fast and Low Power Mobile Applications: https://arxiv.org/abs/1511.06530
+- PyTorch CP and Tucker decomposition: https://github.com/jacobgil/pytorch-tensor-decompositions
+- VBMF code: https://github.com/CasvandenBogaard/VBMF
+- Tensorly: https://github.com/tensorly/tensorly
 
 ### Any comments, thoughts, and improvements are appreciated
