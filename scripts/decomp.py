@@ -20,7 +20,8 @@ from generic_training import train, validate
 from torch_cp_decomp import torch_cp_decomp
 from torch_tucker import tucker_decomp
 
-from decomp_resnet import decomp_resnet
+from decomp_resnet50 import decomp_resnet
+from decomp_alexnet import decomp_alexnet
 
 import argparse
 
@@ -37,6 +38,8 @@ parser.add_argument('-p', '--path', type=str, default=None, \
     help='path to dataset')
 parser.add_argument('-v', '--val', action='store_true', \
     help='training or validation mode')
+parser.add_argument('-a', '--arch', type=str, default='resnet50',\
+    help='network architecture to decompose')
 
 
 def gen_loaders(path, BATCH_SIZE, NUM_WORKERS):
@@ -82,6 +85,14 @@ def main():
     eval_mode = (args.val)
 
     decomp_func = torch_cp_decomp if use_cp else tucker_decomp
+
+    if args.arch == 'resnet50':
+        decomp_arch = decomp_resnet
+    elif args.arch == 'alexnet':
+        decomp_arch = decomp_alexnet
+    else:
+        sys.exit('architecture not supported')
+
     rank_func = est_rank if use_cp else tucker_rank
 
     # here the batch size and the number of threads are preset
@@ -98,7 +109,7 @@ def main():
     train_loader, val_loader = gen_loaders(DATA_PATH, BATCH_SIZE, NUM_WORKERS)
 
     # here use the PyTorch ResNet50 architecture
-    net = models.resnet50(pretrained=True)
+    net = models.__dict__[args.arch](pretrained=True)
 
     if use_model:
         checkpoint = torch.load(args.model)
@@ -109,7 +120,7 @@ def main():
             setattr(net, n, arch[n])
         net.load_state_dict(params)
     else:
-        net = decomp_resnet(net, rank_func, decomp_func)
+        net = decomp_arch(net, rank_func, decomp_func)
 
         
         torch.save({'arch':dict(net.named_children()),\
@@ -178,7 +189,7 @@ def main():
         else 'tucker_state.pth') 
 
     else:
-        train_args['model'] = model
+        train_args['model'] = net
         train_args['batch_size'] = BATCH_SIZE
         train_args['testloader'] = val_loader
 
