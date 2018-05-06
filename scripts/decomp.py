@@ -105,8 +105,8 @@ def main():
         arch = checkpoint['arch']
         params = checkpoint['params']
 
-        net.features = arch['features']
-        net.classifier = arch['classifier']
+        for n, m in net.named_children():
+            setattr(net, n, arch[n])
         net.load_state_dict(params)
     else:
         net = decomp_resnet(net, rank_func, decomp_func)
@@ -156,7 +156,7 @@ def main():
 
     train_args = OrderedDict()
 
-    if eval_net:
+    if not eval_mode:
         train_args['model'] = net
         train_args['trainloader'] = train_loader
         train_args['testloader'] = val_loader
