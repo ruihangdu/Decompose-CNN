@@ -35,6 +35,8 @@ parser.add_argument('-s', '--state', type=str, default=None, \
     help='using a previous retrained (completed) state') 
 parser.add_argument('-p', '--path', type=str, default=None, \
     help='path to dataset')
+parser.add_argument('-v', '--val', action='store_true', \
+    help='training or validation mode')
 
 
 def gen_loaders(path, BATCH_SIZE, NUM_WORKERS):
@@ -77,6 +79,7 @@ def main():
     use_model = (args.model is not None)
     use_param = (args.resume is not None)
     use_state = (args.state is not None)
+    eval_mode = (args.val)
 
     decomp_func = torch_cp_decomp if use_cp else tucker_decomp
     rank_func = est_rank if use_cp else tucker_rank
@@ -152,25 +155,34 @@ def main():
     criterion = nn.CrossEntropyLoss().cuda()
 
     train_args = OrderedDict()
-    train_args['model'] = net
-    train_args['trainloader'] = train_loader
-    train_args['testloader'] = val_loader
-    train_args['batch_size'] = BATCH_SIZE
-    train_args['criterion'] = criterion
-    train_args['optimizer'] = optimizer
-    train_args['target_accr'] = target
-    train_args['err_margin'] = (1.5,1.5)
-    train_args['best_acc'] = (0,0)
-    train_args['topk'] = (1,5)
-    train_args['lr_decay'] = 0.8
-    train_args['saved_epoch'] = epoch
-    train_args['log'] = 'cp_acc.csv' if use_cp else 'tucker_acc.csv'
-    train_args['pname'] = 'cp_best.pth' if use_cp else 'tucker_best.pth'
 
-    train(*train_args.values())
+    if eval_net:
+        train_args['model'] = net
+        train_args['trainloader'] = train_loader
+        train_args['testloader'] = val_loader
+        train_args['batch_size'] = BATCH_SIZE
+        train_args['criterion'] = criterion
+        train_args['optimizer'] = optimizer
+        train_args['target_accr'] = target
+        train_args['err_margin'] = (1.5,1.5)
+        train_args['best_acc'] = (0,0)
+        train_args['topk'] = (1,5)
+        train_args['lr_decay'] = 0.8
+        train_args['saved_epoch'] = epoch
+        train_args['log'] = 'cp_acc.csv' if use_cp else 'tucker_acc.csv'
+        train_args['pname'] = 'cp_best.pth' if use_cp else 'tucker_best.pth'
 
-    torch.save(net.state_dict(), 'cp_state.pth' if use_cp\
-    else 'tucker_state.pth') 
+        train(*train_args.values())
+
+        torch.save(net.state_dict(), 'cp_state.pth' if use_cp\
+        else 'tucker_state.pth') 
+
+    else:
+        train_args['model'] = model
+        train_args['batch_size'] = BATCH_SIZE
+        train_args['testloader'] = val_loader
+
+        validate(*train_args.values())
 
 
 def tucker_rank(layer):
