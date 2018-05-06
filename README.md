@@ -31,6 +31,9 @@ A pre-decomposed ResNet50 is included in the models directory as resnet50_tucker
 The fine-tuned parameters for the model is the resnet50_tucker_state.pth in the models directory.
 
 ## Results
+
+It turn out that Tucker decomposition yields lower accuracy loss than CP decomposition in my experiments, so the results below are all from Tucker decomposition.
+
 ### ResNet50
 
 |  | Top-1 | Top-5 | flops in convolutions (Giga) |
