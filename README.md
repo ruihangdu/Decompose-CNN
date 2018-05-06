@@ -1,5 +1,3 @@
-# Decompose-CNN
-
 ## Goal
 The goal of this program is to decompose each convolutional layers in a model to reduce the total number of Floating-point operations in the convolutions.
 
