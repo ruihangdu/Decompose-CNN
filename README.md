@@ -1,5 +1,5 @@
 ## Goal
-The goal of this program is to decompose each convolutional layers in a model to reduce the total number of Floating-point operations in the convolutions.
+The goal of this program is to decompose each convolutional layers in a model to reduce the total number of floating-point operations (FO) in the convolutions as well as the number of parameters in the model.
 
 ## Contributions
 This is an extension of the work https://github.com/jacobgil/pytorch-tensor-decompositions.
@@ -33,7 +33,7 @@ The fine-tuned parameters for the model is the resnet50_tucker_state.pth in the 
 ## Results
 ### ResNet50
 
-|  | Top-1 | Top-5 | FLOPs in Convolutions (G) |
+|  | Top-1 | Top-5 | FO in Convolutions (G) |
 | ------------- | ------------- | ------------- |  ------------- |
 | Before | 76.15% | 92.87% | 7.0 |
 | After | 74.88% | 92.39% | 4.7 |
