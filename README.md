@@ -6,7 +6,7 @@ This is an extension of the work https://github.com/jacobgil/pytorch-tensor-deco
 In this implementation, everything, including finding the ranks and the actual CP/Tucker Decomposition, is done in PyTorch without switching to numpy.
 
 ## CNN architecture decomposed
-- [ ] AlexNet
+- [x] AlexNet
 - [ ] VGG
 - [x] ResNet50
 
@@ -33,6 +33,13 @@ The fine-tuned parameters for the model is the resnet50_tucker_state.pth in the 
 ## Results
 
 It turn out that Tucker decomposition yields lower accuracy loss than CP decomposition in my experiments, so the results below are all from Tucker decomposition.
+
+### AlexNet
+
+|  | Top-1 | Top-5 | flops in convolutions (Giga) |
+| ------------- | ------------- | ------------- |  ------------- |
+| Before | 56.55% | 79.09% | 1.31 |
+| After | 54.90% | 77.90% | 0.45 |
 
 ### ResNet50
 
